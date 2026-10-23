@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08150f">
+  <meta name="description" content="Una tarjeta de cumpleaños interactiva con tulipanes, globos, pastel y un deseo.">
+  <title>Tarjeta de Cumpleaños · Un jardín para ti</title>
+
+  <!-- Tipografías: Fraunces para los títulos y Manrope para el texto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230B1D15'/%3E%3Cpath d='M32 12c-9 8-10 17-1 24 9-7 10-16 1-24z' fill='%23F5C842'/%3E%3Cpath d='M31 35c0 8 1 13 1 17' stroke='%2379B36A' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Enlace para saltar directamente al contenido con el teclado -->
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <!-- ==========================================================
+       DIBUJOS REUTILIZABLES (tulipán)
+       Están ocultos y luego se copian con <use> donde se necesiten.
+       ========================================================== -->
+  <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- Colores del tallo -->
+      <linearGradient id="tallo-verde" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#7DB45B"/>
+        <stop offset=".55" stop-color="#4C8A45"/>
+        <stop offset="1" stop-color="#285C36"/>
+      </linearGradient>
+
+      <!-- Hojas con dos tonos distintos -->
+      <linearGradient id="hoja-oscura" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#5D9C4B"/>
+        <stop offset=".55" stop-color="#3B763C"/>
+        <stop offset="1" stop-color="#1E4D2C"/>
+      </linearGradient>
+      <linearGradient id="hoja-clara" x1="1" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#8FC267"/>
+        <stop offset=".55" stop-color="#5A9848"/>
+        <stop offset="1" stop-color="#2B6035"/>
+      </linearGradient>
+
+      <!-- Pétalos: de amarillo claro a amarillo intenso -->
+      <linearGradient id="petalo-atras" x1="0" y1="0" x2=".8" y2="1">
+        <stop offset="0" stop-color="#FFD84D"/>
+        <stop offset=".55" stop-color="#F7B91C"/>
+        <stop offset="1" stop-color="#D98E0C"/>
+      </linearGradient>
+      <linearGradient id="petalo-frente" x1=".15" y1="0" x2=".8" y2="1">
+        <stop offset="0" stop-color="#FFF6BA"/>
+        <stop offset=".38" stop-color="#FFE05A"/>
+        <stop offset=".72" stop-color="#FFC21F"/>
+        <stop offset="1" stop-color="#EB9B08"/>
+      </linearGradient>
+      <linearGradient id="petalo-luz" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFFBE0" stop-opacity=".9"/>
+        <stop offset="1" stop-color="#FFF3A0" stop-opacity="0"/>
+      </linearGradient>
+
+      <!-- Sombra suave del tulipán -->
+      <filter id="sombra-tulipan" x="-40%" y="-30%" width="180%" height="180%">
+        <feDropShadow dx="2" dy="7" stdDeviation="5" flood-color="#03100A" flood-opacity=".38"/>
+      </filter>
+
+      <!-- Dibujo completo del tulipán -->
+      <g id="tulipan-a">
+        <!-- Tallo curvo -->
+        <path d="M60 238C55 202 50 172 58 130" fill="none" stroke="url(#tallo-verde)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M58 230C54 200 51 174 57 138" fill="none" stroke="#B4D789" stroke-width="1.4" stroke-linecap="round" opacity=".5"/>
+
+        <!-- Hoja izquierda -->
+        <path d="M58 222C39 205 26 184 24 158C37 169 50 187 59 207Z" fill="url(#hoja-oscura)"/>
+        <path d="M55 213C43 198 34 183 30 168" fill="none" stroke="#B7DA85" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+
+        <!-- Hoja derecha -->
+        <path d="M62 214C81 199 95 177 98 151C83 165 70 184 61 201Z" fill="url(#hoja-clara)"/>
+        <path d="M66 207C78 196 87 183 92 169" fill="none" stroke="#C6E29A" stroke-width="1.2" stroke-linecap="round" opacity=".4"/>
+
+        <!-- Flor: pétalos de atrás, frente y luces -->
+        <g filter="url(#sombra-tulipan)">
+          <path d="M60 132C45 128 31 109 32 83C33 66 38 54 44 47C48 61 52 72 56 82C58 99 60 116 60 132Z" fill="url(#petalo-atras)"/>
+          <path d="M60 132C75 128 89 109 88 83C87 66 82 54 76 47C72 61 68 72 64 82C62 99 60 116 60 132Z" fill="url(#petalo-atras)"/>
+          <path d="M60 137C48 122 45 100 49 78C52 62 56 48 60 39C64 48 68 62 71 78C75 100 72 122 60 137Z" fill="url(#petalo-frente)"/>
+
+          <!-- Volumen y brillo -->
+          <path d="M54 120C48 104 48 84 52 67C55 77 57 98 56 119Z" fill="url(#petalo-luz)" opacity=".65"/>
+          <path d="M60 58C58 74 58 100 60 124" fill="none" stroke="#C98409" stroke-width="1.2" stroke-linecap="round" opacity=".28"/>
+          <path d="M39 76C40 91 45 106 54 117" fill="none" stroke="#FFF3A0" stroke-width="1.4" stroke-linecap="round" opacity=".35"/>
+          <path d="M81 76C80 91 75 106 66 117" fill="none" stroke="#FFE37A" stroke-width="1.2" stroke-linecap="round" opacity=".28"/>
+        </g>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- ==========================================================
+       FONDO: jardín, globos y textura
+       ========================================================== -->
+  <div class="ambiente" aria-hidden="true">
+    <div class="resplandor resplandor--arriba"></div>
+    <div class="resplandor resplandor--izquierda"></div>
+    <div class="resplandor resplandor--derecha"></div>
+
+    <!-- Tulipanes fantasma que se ven antes de celebrar -->
+    <div class="fantasmas">
+      <svg viewBox="0 0 120 240" class="fantasma fantasma--1"><use href="#tulipan-a"></use></svg>
+      <svg viewBox="0 0 120 240" class="fantasma fantasma--2"><use href="#tulipan-a"></use></svg>
+      <svg viewBox="0 0 120 240" class="fantasma fantasma--3"><use href="#tulipan-a"></use></svg>
+    </div>
+
+    <div id="jardin" class="jardin"></div>
+    <div class="grano"></div>
+    <div class="vineta"></div>
+  </div>
+
+  <!-- Capa decorativa de globos. Los clics se gestionan en script.js;
+       para el teclado hay un botón "Globo" en la barra superior. -->
+  <div id="globos" class="globos" aria-hidden="true"></div>
+
+  <!-- Confeti dibujado en canvas -->
+  <canvas id="confeti" class="confeti" aria-hidden="true"></canvas>
+
+  <div class="pagina">
+
+    <!-- ========================================================
+         BARRA SUPERIOR
+         ======================================================== -->
+    <header class="barra">
+      <a class="marca" href="#">
+        <span class="marca-icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3C8.5 6.3 8.2 10.2 12 13c3.8-2.8 3.5-6.7 0-10Z" fill="currentColor"/>
+            <path d="M12 13v7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="marca-texto">
+          Cumpleaños
+          <span class="marca-sub">Edición jardín</span>
+          <span class="sr-only">Volver al formulario</span>
+        </span>
+      </a>
+
+      <div class="barra-derecha">
+        <span class="barra-detalle" aria-hidden="true">Nº 01</span>
+
+        <button id="boton-globo" class="boton-sonido boton-globo" type="button" aria-label="Explotar un globo" hidden>
+          <svg class="icono-sonido" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3.2c-3.6 0-6.4 2.8-6.4 6.4 0 3.3 2.6 6.1 5.9 6.3l.5.1.5-.1c3.3-.2 5.9-3 5.9-6.3 0-3.6-2.8-6.4-6.4-6.4Z" fill="currentColor"/>
+            <path d="M12 16v1.6M10.8 17.6 12 18.8l1.2-1.2M12 18.8c-1.6 1.8 1.6 2.7 0 4.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="boton-sonido-texto">Globo</span>
+        </button>
+
+        <button id="boton-sonido" class="boton-sonido" type="button" aria-pressed="false" aria-label="Activar sonido">
+          <svg class="icono-sonido icono-sonido--on" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 9.5v5h3.4L13 19V5L7.4 9.5H4Z" fill="currentColor"/>
+            <path d="M16.3 8.5c1.7 1.6 1.7 5.4 0 7M18.8 6c2.8 2.7 2.8 9.3 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <svg class="icono-sonido icono-sonido--off" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 9.5v5h3.4L13 19V5L7.4 9.5H4Z" fill="currentColor"/>
+            <path d="m16.5 9.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="boton-sonido-texto">Sonido</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         CONTENIDO PRINCIPAL
+         ======================================================== -->
+    <main id="contenido" class="lienzo" tabindex="-1">
+
+      <div class="vistas">
+
+        <!-- ---------- Vista 1: antes de celebrar ---------- -->
+        <section id="vista-inicio" class="vista inicio entra" aria-labelledby="titulo-inicio">
+          <p class="sobrelinea"><span class="punto" aria-hidden="true"></span>Una tarjeta viva</p>
+
+          <h1 id="titulo-inicio" class="titulo-inicio">
+            Haz de hoy
+            <span class="titulo-inicio-em">un recuerdo.</span>
+          </h1>
+
+          <p class="entrada">
+            Escribe la edad que cumples y deja que el jardín se abra.
+            Tulipanes, globos y un deseo esperan al otro lado.
+          </p>
+
+          <p class="micro">
+            <span aria-hidden="true">✦</span>
+            Sin cuentas, sin servidores. Solo un buen rato.
+          </p>
+        </section>
+
+        <!-- ---------- Vista 2: la celebración ---------- -->
+        <section id="vista-celebracion" class="vista celebracion" aria-labelledby="titulo-celebracion" hidden>
+          <p class="sobrelinea"><span class="punto" aria-hidden="true"></span>El jardín está abierto</p>
+
+          <h1 id="titulo-celebracion" class="titulo-celebracion" tabindex="-1">
+            <span>¡Feliz</span>
+            <span class="titulo-celebracion-em">cumpleaños!</span>
+            <span class="sr-only">, <span id="edad-lector">30</span> <span id="unidad-lector">años</span></span>
+          </h1>
+
+          <div class="fila-edad">
+            <p class="medalla-edad" aria-hidden="true">
+              <strong id="edad-numero">30</strong>
+              <span id="unidad-edad">años</span>
+            </p>
+            <p id="frase-edad" class="frase-edad">La década dorada. Y esto solo es el comienzo.</p>
+          </div>
+
+          <div class="pastel-escena">
+            <div class="pastel-halo" aria-hidden="true"></div>
+
+            <button id="pastel-boton" class="pastel-boton" type="button" aria-describedby="pista-pastel">
+              <!-- =================================================
+                   PASTEL DE CUMPLEAÑOS (dibujado con SVG)
+                   ================================================= -->
+              <svg class="pastel" viewBox="0 0 440 430" role="img" aria-hidden="true" focusable="false">
+                <defs>
+                  <linearGradient id="pastel-bajo" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#FFF0DC"/>
+                    <stop offset=".45" stop-color="#EFC4A6"/>
+                    <stop offset="1" stop-color="#D59570"/>
+                  </linearGradient>
+                  <linearGradient id="pastel-alto" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#FFFAF0"/>
+                    <stop offset=".48" stop-color="#F3D0B8"/>
+                    <stop offset="1" stop-color="#DE9C7C"/>
+                  </linearGradient>
+                  <linearGradient id="glaseado" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#FFFFFF"/>
+                    <stop offset=".65" stop-color="#FFF6E8"/>
+                    <stop offset="1" stop-color="#FBE6CF"/>
+                  </linearGradient>
+                  <linearGradient id="plato" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#FFEDBE"/>
+                    <stop offset=".45" stop-color="#E3BC79"/>
+                    <stop offset="1" stop-color="#A97B3C"/>
+                  </linearGradient>
+                  <linearGradient id="oro" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#FFF0A6"/>
+                    <stop offset=".5" stop-color="#F5C842"/>
+                    <stop offset="1" stop-color="#C98D2A"/>
+                  </linearGradient>
+                  <linearGradient id="fuego" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0" stop-color="#FF8A1B"/>
+                    <stop offset=".55" stop-color="#FFD45E"/>
+                    <stop offset="1" stop-color="#FFF9CF"/>
+                  </linearGradient>
+                  <linearGradient id="sombra-lateral" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#6B3527" stop-opacity="0"/>
+                    <stop offset=".63" stop-color="#6B3527" stop-opacity="0"/>
+                    <stop offset="1" stop-color="#6B3527" stop-opacity=".2"/>
+                  </linearGradient>
+
+                  <!-- Rayas de las velas -->
+                  <pattern id="rayas-vela" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(32)">
+                    <rect width="10" height="10" fill="#FFF7E9"/>
+                    <rect width="5" height="10" fill="#F47B6A"/>
+                  </pattern>
+
+                  <filter id="sombra-pastel" x="-30%" y="-30%" width="160%" height="180%">
+                    <feDropShadow dx="0" dy="14" stdDeviation="13" flood-color="#03100A" flood-opacity=".5"/>
+                  </filter>
+                  <filter id="brillo-llama" x="-200%" y="-200%" width="500%" height="500%">
+                    <feGaussianBlur stdDeviation="6"/>
+                  </filter>
+
+                  <clipPath id="recorte-bajo">
+                    <rect x="82" y="272" width="276" height="88" rx="22"/>
+                  </clipPath>
+                  <clipPath id="recorte-alto">
+                    <rect x="138" y="206" width="164" height="72" rx="16"/>
+                  </clipPath>
+                </defs>
+
+                <!-- Sombra y plato -->
+                <ellipse cx="220" cy="402" rx="176" ry="18" fill="#03100A" opacity=".55"/>
+                <ellipse cx="220" cy="384" rx="178" ry="24" fill="url(#oro)"/>
+                <ellipse cx="220" cy="376" rx="163" ry="20" fill="url(#plato)"/>
+                <ellipse cx="220" cy="371" rx="148" ry="15" fill="#FFF4DC" opacity=".9"/>
+                <ellipse cx="220" cy="371" rx="132" ry="11" fill="#FFF9EB" opacity=".8"/>
+
+                <g filter="url(#sombra-pastel)">
+                  <!-- Piso inferior del pastel -->
+                  <rect x="82" y="272" width="276" height="88" rx="22" fill="url(#pastel-bajo)"/>
+                  <g clip-path="url(#recorte-bajo)">
+                    <rect x="82" y="272" width="276" height="88" fill="url(#sombra-lateral)"/>
+                    <rect x="82" y="340" width="276" height="8" fill="url(#oro)" opacity=".85"/>
+                    <rect x="82" y="348" width="276" height="2" fill="#FFF0A6" opacity=".35"/>
+
+                    <!-- Glaseado del piso inferior con gotas -->
+                    <rect x="82" y="264" width="276" height="32" fill="url(#glaseado)"/>
+                    <g fill="url(#glaseado)">
+                      <rect x="96" y="288" width="23" height="27" rx="11.5"/>
+                      <rect x="137" y="288" width="15" height="15" rx="7.5"/>
+                      <rect x="164" y="288" width="24" height="35" rx="12"/>
+                      <rect x="204" y="288" width="17" height="19" rx="8.5"/>
+                      <rect x="240" y="288" width="21" height="29" rx="10.5"/>
+                      <rect x="280" y="288" width="16" height="16" rx="8"/>
+                      <rect x="312" y="288" width="24" height="32" rx="12"/>
+                    </g>
+                    <rect x="82" y="296" width="276" height="3" fill="#D9A98E" opacity=".18"/>
+                  </g>
+
+                  <!-- Piso superior del pastel -->
+                  <rect x="138" y="206" width="164" height="72" rx="16" fill="url(#pastel-alto)"/>
+                  <g clip-path="url(#recorte-alto)">
+                    <rect x="138" y="206" width="164" height="72" fill="url(#sombra-lateral)"/>
+                    <rect x="138" y="262" width="164" height="6" fill="url(#oro)" opacity=".75"/>
+
+                    <!-- Glaseado del piso superior -->
+                    <rect x="138" y="199" width="164" height="29" fill="url(#glaseado)"/>
+                    <g fill="url(#glaseado)">
+                      <rect x="150" y="222" width="18" height="22" rx="9"/>
+                      <rect x="180" y="222" width="13" height="13" rx="6.5"/>
+                      <rect x="205" y="222" width="21" height="28" rx="10.5"/>
+                      <rect x="241" y="222" width="15" height="17" rx="7.5"/>
+                      <rect x="266" y="222" width="22" height="24" rx="11"/>
+                    </g>
+                    <rect x="138" y="226" width="164" height="3" fill="#D9A98E" opacity=".16"/>
+                  </g>
+
+                  <!-- Chispas de colores -->
+                  <g>
+                    <rect x="108" y="309" width="10" height="4" rx="2" fill="#F47B6A" transform="rotate(22 108 309)"/>
+                    <rect x="129" y="325" width="8" height="3.5" rx="1.75" fill="#79D6B0" transform="rotate(-18 129 325)"/>
+                    <rect x="292" y="312" width="9" height="3.5" rx="1.75" fill="#C4A7FF" transform="rotate(28 292 312)"/>
+                    <rect x="313" y="331" width="10" height="4" rx="2" fill="#7FC8FF" transform="rotate(-24 313 331)"/>
+                    <rect x="158" y="245" width="8" height="3.5" rx="1.75" fill="#F5C842" transform="rotate(18 158 245)"/>
+                    <rect x="266" y="247" width="9" height="3.5" rx="1.75" fill="#F47B6A" transform="rotate(-20 266 247)"/>
+                    <rect x="246" y="238" width="7" height="3" rx="1.5" fill="#79D6B0" transform="rotate(35 246 238)"/>
+                  </g>
+
+                  <!-- Medallón con la edad -->
+                  <g>
+                    <circle cx="220" cy="322" r="30" fill="#0E261C" stroke="url(#oro)" stroke-width="2"/>
+                    <circle cx="220" cy="322" r="25.5" fill="none" stroke="#F5C842" stroke-width=".8" opacity=".35"/>
+                    <text id="pastel-edad" x="220" y="325" text-anchor="middle" fill="#F5C842" font-family="Fraunces, Georgia, serif" font-size="27" font-weight="500">30</text>
+                    <text id="pastel-unidad" x="220" y="339" text-anchor="middle" fill="#F5C842" font-family="Manrope, Arial, sans-serif" font-size="5.5" letter-spacing="1.4" opacity=".8">AÑOS</text>
+                  </g>
+                </g>
+
+                <!-- Velas -->
+                <g class="velas">
+                  <g class="vela" transform="translate(186 204)">
+                    <rect x="-4.5" y="-42" width="9" height="42" rx="4.5" fill="url(#rayas-vela)"/>
+                    <rect x="-4.5" y="-42" width="3" height="42" rx="1.5" fill="#FFFFFF" opacity=".3"/>
+                    <line x1="0" y1="-43" x2="0" y2="-49" stroke="#4B3325" stroke-width="1.8" stroke-linecap="round"/>
+                    <g transform="translate(0 -49)">
+                      <g class="llama-movimiento">
+                        <ellipse cx="0" cy="-7" rx="10" ry="15" fill="#FFC94F" opacity=".28" filter="url(#brillo-llama)"/>
+                        <path d="M0 3C-7-3-5.5-11 0-19C5.5-11 7-3 0 3Z" fill="url(#fuego)"/>
+                        <path d="M0 1C-3-3-2.5-8 0-13C2.5-8 3-3 0 1Z" fill="#FFF9D9"/>
+                      </g>
+                      <path class="humo" d="M0-22C-9-34 8-42 0-55C-6-65 6-72 0-84" fill="none" stroke="#EDE5D4" stroke-width="2" stroke-linecap="round" opacity="0"/>
+                    </g>
+                  </g>
+
+                  <g class="vela" transform="translate(220 204)">
+                    <rect x="-4.5" y="-42" width="9" height="42" rx="4.5" fill="url(#rayas-vela)"/>
+                    <rect x="-4.5" y="-42" width="3" height="42" rx="1.5" fill="#FFFFFF" opacity=".3"/>
+                    <line x1="0" y1="-43" x2="0" y2="-49" stroke="#4B3325" stroke-width="1.8" stroke-linecap="round"/>
+                    <g transform="translate(0 -49)">
+                      <g class="llama-movimiento">
+                        <ellipse cx="0" cy="-7" rx="10" ry="15" fill="#FFC94F" opacity=".3" filter="url(#brillo-llama)"/>
+                        <path d="M0 3C-7-3-5.5-11 0-19C5.5-11 7-3 0 3Z" fill="url(#fuego)"/>
+                        <path d="M0 1C-3-3-2.5-8 0-13C2.5-8 3-3 0 1Z" fill="#FFF9D9"/>
+                      </g>
+                      <path class="humo" d="M0-22C-9-34 8-42 0-55C-6-65 6-72 0-84" fill="none" stroke="#EDE5D4" stroke-width="2" stroke-linecap="round" opacity="0"/>
+                    </g>
+                  </g>
+
+                  <g class="vela" transform="translate(254 204)">
+                    <rect x="-4.5" y="-42" width="9" height="42" rx="4.5" fill="url(#rayas-vela)"/>
+                    <rect x="-4.5" y="-42" width="3" height="42" rx="1.5" fill="#FFFFFF" opacity=".3"/>
+                    <line x1="0" y1="-43" x2="0" y2="-49" stroke="#4B3325" stroke-width="1.8" stroke-linecap="round"/>
+                    <g transform="translate(0 -49)">
+                      <g class="llama-movimiento">
+                        <ellipse cx="0" cy="-7" rx="10" ry="15" fill="#FFC94F" opacity=".27" filter="url(#brillo-llama)"/>
+                        <path d="M0 3C-7-3-5.5-11 0-19C5.5-11 7-3 0 3Z" fill="url(#fuego)"/>
+                        <path d="M0 1C-3-3-2.5-8 0-13C2.5-8 3-3 0 1Z" fill="#FFF9D9"/>
+                      </g>
+                      <path class="humo" d="M0-22C-9-34 8-42 0-55C-6-65 6-72 0-84" fill="none" stroke="#EDE5D4" stroke-width="2" stroke-linecap="round" opacity="0"/>
+                    </g>
+                  </g>
+                </g>
+
+                <!-- Hojitas decorativas junto al plato -->
+                <g opacity=".9">
+                  <path d="M74 372C52 358 44 344 46 330C61 342 70 354 78 368Z" fill="#3E7A44"/>
+                  <path d="M366 372C388 357 396 343 394 329C379 341 370 353 362 367Z" fill="#4C8A45"/>
+                  <path d="M72 382C90 374 104 376 116 384C102 390 86 390 72 382Z" fill="#2F6136" opacity=".8"/>
+                  <circle cx="60" cy="349" r="4" fill="#F5C842"/>
+                  <circle cx="380" cy="348" r="3.4" fill="#F5C842"/>
+                </g>
+              </svg>
+            </button>
+
+            <p id="pista-pastel" class="pista">Toca el pastel y pide un deseo</p>
+            <p id="aviso" class="aviso" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ========================================================
+           FORMULARIO (siempre visible para volver a celebrar)
+           ======================================================== -->
+      <section class="accion" aria-labelledby="form-titulo">
+        <div class="accion-texto">
+          <h2 id="form-titulo">Nueva edad</h2>
+          <p>Un número entero, mayor que 0.</p>
+        </div>
+
+        <form id="form-cumple" class="form-cumple" novalidate>
+          <div class="campo">
+            <label class="sr-only" for="edad">Nueva edad</label>
+            <input
+              id="edad"
+              name="edad"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              step="1"
+              placeholder="30"
+              autocomplete="off"
+              required
+              aria-describedby="ayuda-edad error-edad"
+            >
+            <span class="sufijo" aria-hidden="true">años</span>
+          </div>
+
+          <button type="submit" class="boton-celebrar">
+            <span>Celebrar</span>
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 10h11M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+
+        <p id="ayuda-edad" class="ayuda">Solo números enteros mayores que 0.</p>
+        <p id="error-edad" class="error" role="alert"></p>
+      </section>
+
+    </main>
+
+    <!-- ========================================================
+         PIE DE PÁGINA
+         ======================================================== -->
+    <footer class="pie">
+      <p>Hecho de tulipanes, globos y buenos deseos.</p>
+      <p class="pie-detalle">Toca los globos <span aria-hidden="true">✦</span> toca el pastel <span aria-hidden="true">✦</span> pide un deseo</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

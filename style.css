@@ -1,0 +1,1420 @@
+/* ==========================================================
+   TARJETA DE CUMPLEAÑOS · HOJA DE ESTILOS
+   Todo está comentado por bloques para que sea fácil de seguir.
+   ========================================================== */
+
+/* ---------- 1. Variables y base ---------- */
+:root {
+  --noche: #07130e;
+  --noche-2: #0b1d15;
+  --crema: #fff6e6;
+  --crema-suave: rgba(255, 246, 230, 0.68);
+  --crema-tenue: rgba(255, 246, 230, 0.62);
+  --oro: #f5c842;
+  --oro-claro: #ffe27a;
+  --coral: #ff8a7a;
+  --menta: #79d6b0;
+  --cielo: #7fc8ff;
+  --lila: #c4a7ff;
+  --borde: rgba(255, 246, 230, 0.14);
+  --cristal: rgba(11, 29, 21, 0.58);
+  --fuente-titulo: "Fraunces", Georgia, "Times New Roman", serif;
+  --fuente-texto: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  background:
+    radial-gradient(ellipse 75% 55% at 50% -8%, rgba(255, 208, 92, 0.16), transparent 62%),
+    radial-gradient(ellipse 55% 50% at 100% 100%, rgba(49, 139, 101, 0.18), transparent 70%),
+    radial-gradient(ellipse 60% 55% at 0% 92%, rgba(31, 98, 74, 0.2), transparent 72%),
+    linear-gradient(180deg, #08150f 0%, #0b1d15 47%, #06110c 100%);
+  color: var(--crema);
+  font-family: var(--fuente-texto);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  /* Un halo cálido extra detrás de todo el contenido */
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse 30% 24% at 50% 18%, rgba(255, 213, 112, 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+svg {
+  display: block;
+}
+
+::selection {
+  background: var(--oro);
+  color: #14251a;
+}
+
+/* Accesibilidad: texto solo para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Enlace para saltar al contenido (solo aparece con teclado) */
+.saltar {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: var(--oro);
+  color: #14251a;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 0.2s ease;
+}
+
+.saltar:focus {
+  transform: translateY(0);
+}
+
+/* Foco visible y elegante en toda la página */
+:focus-visible {
+  outline: 2px solid var(--oro-claro);
+  outline-offset: 4px;
+}
+
+/* El título y el destino del enlace "saltar" reciben el foco por código.
+   No son controles, así que no necesitan un anillo visible. */
+#contenido:focus,
+.titulo-celebracion:focus {
+  outline: none;
+}
+
+/* El dibujo reutilizable no ocupa espacio */
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ---------- 2. Fondo: jardín, luz, textura ---------- */
+.ambiente {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(8, 21, 15, 0.1) 0%, rgba(6, 17, 12, 0.55) 100%);
+}
+
+.resplandor {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.7;
+}
+
+.resplandor--arriba {
+  width: 52vw;
+  height: 34vw;
+  top: -16vw;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(255, 206, 91, 0.16), transparent 68%);
+}
+
+.resplandor--izquierda {
+  width: 36vw;
+  height: 36vw;
+  left: -18vw;
+  bottom: -10vw;
+  background: radial-gradient(circle, rgba(57, 139, 93, 0.22), transparent 70%);
+}
+
+.resplandor--derecha {
+  width: 30vw;
+  height: 30vw;
+  right: -14vw;
+  bottom: 4vw;
+  background: radial-gradient(circle, rgba(255, 128, 100, 0.1), transparent 70%);
+}
+
+/* Tulipanes gigantes y difuminados del fondo inicial */
+.fantasmas {
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+body.celebrando .fantasmas {
+  opacity: 0;
+}
+
+.fantasma {
+  position: absolute;
+  bottom: -8%;
+  width: clamp(190px, 25vw, 400px);
+  height: auto;
+  opacity: 0.11;
+  filter: saturate(0.6) blur(0.5px);
+}
+
+.fantasma--1 {
+  left: -4%;
+  transform: rotate(-9deg);
+}
+
+.fantasma--2 {
+  right: -3%;
+  bottom: -12%;
+  width: clamp(230px, 30vw, 480px);
+  transform: rotate(10deg) scaleX(-1);
+}
+
+.fantasma--3 {
+  left: 38%;
+  bottom: -16%;
+  width: clamp(160px, 19vw, 300px);
+  opacity: 0.07;
+  transform: rotate(4deg);
+}
+
+/* Capas donde JavaScript coloca tulipanes y globos */
+.jardin {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.globos {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Textura de papel muy suave */
+.grano {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: 0.05;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+}
+
+/* Oscurece un poco los bordes para que el centro respire */
+.vineta {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background:
+    radial-gradient(ellipse 72% 68% at 50% 42%, transparent 42%, rgba(3, 12, 8, 0.55) 100%),
+    linear-gradient(180deg, rgba(3, 12, 8, 0.3) 0%, transparent 18%, transparent 80%, rgba(3, 12, 8, 0.45) 100%);
+}
+
+/* Confeti por encima de todo, sin bloquear clics */
+.confeti {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ---------- 3. Estructura de la página ---------- */
+.pagina {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  min-height: 100vh;
+  min-height: 100svh;
+  flex-direction: column;
+}
+
+/* --- Barra superior --- */
+.barra {
+  display: flex;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 22px clamp(20px, 4vw, 52px);
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--crema);
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+.marca-icono {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: var(--oro);
+  border: 1px solid rgba(245, 200, 66, 0.38);
+  border-radius: 50%;
+  background: rgba(255, 246, 230, 0.035);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.marca-icono svg {
+  width: 22px;
+  height: 22px;
+}
+
+.marca-texto {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.marca-sub {
+  display: block;
+  margin-top: 3px;
+  color: var(--crema-tenue);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+}
+
+.barra-derecha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.barra-detalle {
+  padding: 7px 12px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  color: var(--crema-tenue);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+
+.boton-sonido {
+  display: inline-flex;
+  height: 40px;
+  padding: 0 14px;
+  align-items: center;
+  gap: 8px;
+  color: var(--crema-suave);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: rgba(255, 246, 230, 0.04);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.boton-sonido:hover {
+  color: var(--crema);
+  border-color: rgba(245, 200, 66, 0.58);
+  background: rgba(245, 200, 66, 0.07);
+}
+
+.boton-sonido[aria-pressed="true"] {
+  color: var(--oro);
+  border-color: rgba(245, 200, 66, 0.58);
+}
+
+.icono-sonido {
+  width: 18px;
+  height: 18px;
+}
+
+.boton-sonido .icono-sonido--on {
+  display: none;
+}
+
+.boton-sonido[aria-pressed="true"] .icono-sonido--on {
+  display: block;
+}
+
+.boton-sonido[aria-pressed="true"] .icono-sonido--off {
+  display: none;
+}
+
+.boton-sonido-texto {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* --- Zona central --- */
+.lienzo {
+  display: flex;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 10px clamp(20px, 5vw, 56px) 26px;
+  flex: 1;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.vistas {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  padding: clamp(14px, 4vh, 48px) 0;
+}
+
+.vista {
+  width: 100%;
+  text-align: center;
+}
+
+/* Animación de entrada de los bloques de cada vista */
+.vista.entra > * {
+  animation: aparecer 0.85s cubic-bezier(0.22, 0.7, 0.24, 1) both;
+}
+
+.vista.entra > *:nth-child(1) { animation-delay: 0.04s; }
+.vista.entra > *:nth-child(2) { animation-delay: 0.12s; }
+.vista.entra > *:nth-child(3) { animation-delay: 0.22s; }
+.vista.entra > *:nth-child(4) { animation-delay: 0.3s; }
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pequeña etiqueta que abre cada vista */
+.sobrelinea {
+  display: inline-flex;
+  margin: 0;
+  align-items: center;
+  gap: 9px;
+  color: var(--crema-suave);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.punto {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--oro);
+  box-shadow: 0 0 12px rgba(245, 200, 66, 0.7);
+}
+
+.punto::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px solid rgba(245, 200, 66, 0.4);
+  border-radius: 50%;
+  animation: latido 2.6s ease-out infinite;
+}
+
+@keyframes latido {
+  0%, 100% { transform: scale(0.6); opacity: 0; }
+  35% { opacity: 0.8; }
+  80% { transform: scale(1.35); opacity: 0; }
+}
+
+/* --- Vista inicial --- */
+.inicio {
+  max-width: 960px;
+}
+
+.titulo-inicio {
+  margin: 18px auto 22px;
+  color: var(--crema);
+  font-family: var(--fuente-titulo);
+  font-size: clamp(3.35rem, 8.4vw, 7rem);
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 0.91;
+  text-wrap: balance;
+  text-shadow: 0 2px 24px rgba(3, 16, 10, 0.55), 0 1px 2px rgba(3, 16, 10, 0.45);
+}
+
+.titulo-inicio-em {
+  display: block;
+  padding-bottom: 0.05em;
+  background: linear-gradient(108deg, #fff3b0 4%, var(--oro) 48%, #e0a32d 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.entrada {
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--crema-suave);
+  font-size: clamp(0.96rem, 1.35vw, 1.08rem);
+  line-height: 1.68;
+  text-wrap: pretty;
+  text-shadow: 0 1px 10px rgba(3, 16, 10, 0.6);
+}
+
+.micro {
+  display: inline-flex;
+  margin: 26px 0 0;
+  align-items: center;
+  gap: 9px;
+  color: var(--crema-tenue);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.micro span {
+  color: var(--oro);
+  font-size: 12px;
+}
+
+/* --- Vista de celebración --- */
+.celebracion {
+  display: flex;
+  max-width: 980px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titulo-celebracion {
+  margin: 12px 0 0;
+  color: var(--crema);
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2.85rem, 6.9vw, 6.3rem);
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+  text-wrap: balance;
+  text-shadow: 0 2px 24px rgba(3, 16, 10, 0.55), 0 1px 2px rgba(3, 16, 10, 0.45);
+}
+
+.titulo-celebracion > span {
+  display: block;
+}
+
+.titulo-celebracion-em {
+  padding-bottom: 0.06em;
+  background: linear-gradient(108deg, #fff3b0 2%, var(--oro) 48%, #e0a32d 98%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* La edad se muestra como una medalla y se acompaña de una frase */
+.fila-edad {
+  display: flex;
+  margin-top: 18px;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.medalla-edad {
+  display: inline-flex;
+  margin: 0;
+  padding: 8px 20px 10px;
+  align-items: baseline;
+  gap: 8px;
+  border: 1px solid rgba(245, 200, 66, 0.42);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(245, 200, 66, 0.13), rgba(245, 200, 66, 0.03));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 14px 40px -22px rgba(245, 200, 66, 0.7);
+}
+
+.medalla-edad strong {
+  color: var(--oro-claro);
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2rem, 3.2vw, 2.7rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.medalla-edad span {
+  color: var(--crema-suave);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.frase-edad {
+  max-width: 390px;
+  margin: 0;
+  color: var(--crema-suave);
+  font-size: 13px;
+  line-height: 1.55;
+  text-align: left;
+  text-wrap: pretty;
+}
+
+/* --- Pastel --- */
+.pastel-escena {
+  position: relative;
+  display: flex;
+  margin-top: 6px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pastel-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(560px, 90vw);
+  height: min(400px, 55vh);
+  transform: translate(-50%, -52%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 199, 95, 0.18) 0%, rgba(255, 170, 70, 0.06) 42%, transparent 70%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+.pastel-boton {
+  position: relative;
+  display: block;
+  width: clamp(265px, 32vw, 345px);
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.pastel-boton:hover {
+  transform: translateY(-4px) scale(1.012);
+}
+
+.pastel-boton:active {
+  transform: translateY(-1px) scale(0.995);
+}
+
+.pastel-boton:focus-visible {
+  outline: 2px solid var(--oro-claro);
+  outline-offset: 8px;
+}
+
+.pastel {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.35));
+}
+
+/* Las llamas se mueven un poco, como si hubiera aire */
+.llama-movimiento {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: llama 1.45s ease-in-out infinite alternate;
+}
+
+.vela:nth-child(2) .llama-movimiento {
+  animation-duration: 1.75s;
+  animation-delay: -0.45s;
+}
+
+.vela:nth-child(3) .llama-movimiento {
+  animation-duration: 1.6s;
+  animation-delay: -0.9s;
+}
+
+@keyframes llama {
+  from { transform: scale(1) rotate(-2.5deg); }
+  to { transform: scale(1.07, 1.13) rotate(2.5deg); }
+}
+
+/* Cuando el pastel está soplado, las llamas se apagan y sale humo */
+.pastel-boton.soplado .llama-movimiento {
+  opacity: 0;
+  transform: scale(0.2);
+  animation: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.pastel-boton.soplado .humo {
+  animation: humo 1.7s ease-out forwards;
+}
+
+@keyframes humo {
+  0% { opacity: 0; transform: translateY(0) scale(0.9); }
+  18% { opacity: 0.55; }
+  100% { opacity: 0; transform: translateY(-20px) scale(1.18); }
+}
+
+.pista {
+  margin: 2px 0 0;
+  color: var(--crema-tenue);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.aviso {
+  min-height: 22px;
+  margin: 8px 0 0;
+  color: var(--oro-claro);
+  font-family: var(--fuente-titulo);
+  font-size: 15px;
+  font-style: italic;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.aviso.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- 4. Formulario ---------- */
+.accion {
+  display: grid;
+  width: min(100%, 860px);
+  margin: 0 auto;
+  padding: 16px 18px 13px;
+  grid-template-areas:
+    "texto form"
+    "ayuda ayuda"
+    "error error";
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px 24px;
+  border: 1px solid var(--borde);
+  border-radius: 22px;
+  background: var(--cristal);
+  box-shadow: 0 30px 70px -34px rgba(0, 0, 0, 0.85), inset 0 1px rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.accion-texto {
+  grid-area: texto;
+  min-width: 160px;
+}
+
+.accion-texto h2 {
+  margin: 0;
+  color: var(--crema);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.accion-texto p {
+  margin: 5px 0 0;
+  color: var(--crema-tenue);
+  font-size: 11px;
+}
+
+.form-cumple {
+  display: flex;
+  grid-area: form;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.campo {
+  position: relative;
+}
+
+.campo input {
+  width: 152px;
+  height: 56px;
+  padding: 0 54px 0 17px;
+  color: var(--crema);
+  border: 1px solid rgba(255, 246, 230, 0.17);
+  border-radius: 13px;
+  background: rgba(255, 246, 230, 0.055);
+  font-family: var(--fuente-titulo);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.campo input::placeholder {
+  color: rgba(255, 246, 230, 0.42);
+}
+
+.campo input:hover {
+  background: rgba(255, 246, 230, 0.075);
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: rgba(245, 200, 66, 0.72);
+  background: rgba(255, 246, 230, 0.08);
+  box-shadow: 0 0 0 4px rgba(245, 200, 66, 0.13);
+}
+
+/* Quita las flechitas del campo numérico */
+.campo input::-webkit-outer-spin-button,
+.campo input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.campo input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.sufijo {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: var(--crema-tenue);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Estado de error del campo */
+.campo.con-error input {
+  border-color: rgba(255, 138, 122, 0.8);
+  box-shadow: 0 0 0 4px rgba(255, 138, 122, 0.12);
+}
+
+.boton-celebrar {
+  display: inline-flex;
+  height: 56px;
+  padding: 0 23px;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  color: #14251a;
+  border: 0;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--oro-claro) 0%, var(--oro) 52%, #e2a92e 100%);
+  box-shadow: 0 14px 30px -14px rgba(245, 200, 66, 0.8), inset 0 1px rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.boton-celebrar svg {
+  width: 17px;
+  height: 17px;
+  transition: transform 0.2s ease;
+}
+
+.boton-celebrar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 38px -15px rgba(245, 200, 66, 0.9), inset 0 1px rgba(255, 255, 255, 0.5);
+  filter: brightness(1.03);
+}
+
+.boton-celebrar:hover svg {
+  transform: translateX(3px);
+}
+
+.boton-celebrar:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.ayuda {
+  grid-area: ayuda;
+  margin: 9px 2px 0;
+  color: var(--crema-tenue);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  text-align: right;
+}
+
+.error {
+  grid-area: error;
+  margin: 9px 0 0;
+  padding: 9px 12px;
+  color: #ffc0b6;
+  border: 1px solid rgba(255, 138, 122, 0.3);
+  border-radius: 10px;
+  background: rgba(255, 138, 122, 0.1);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.error:empty {
+  display: none;
+}
+
+/* Si el navegador no soporta desenfoque, el fondo se vuelve más sólido */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .accion {
+    background: rgba(9, 24, 17, 0.94);
+  }
+}
+
+/* ---------- 5. Pie ---------- */
+.pie {
+  display: flex;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 16px clamp(20px, 4vw, 52px) 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 246, 230, 0.07);
+  color: rgba(255, 246, 230, 0.55);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pie p {
+  margin: 0;
+}
+
+.pie-detalle span {
+  margin: 0 4px;
+  color: var(--oro);
+}
+
+/* Durante la celebración el pie se retira para dejar sitio al pastel. */
+body.celebrando .pie {
+  display: none;
+}
+
+body.celebrando .lienzo {
+  padding-bottom: 14px;
+}
+
+/* ==========================================================
+   6. TULIPANES GENERADOS CON JAVASCRIPT
+   ========================================================== */
+.tulipan {
+  position: absolute;
+  width: var(--tamano, 90px);
+  opacity: var(--opacidad, 1);
+  will-change: transform, opacity;
+}
+
+.tulipan svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.28));
+  transform-origin: 50% 100%;
+}
+
+/* Algunos tulipanes giran para parecer distintos */
+.tulipan .espejo {
+  transform: scaleX(-1);
+}
+
+/* Movimiento suave y continuo después de entrar */
+.tulipan-movimiento {
+  display: block;
+  transform-origin: 50% 100%;
+  animation: mecer var(--mecer, 5s) ease-in-out infinite alternate;
+  animation-delay: calc(var(--delay, 0s) + 0.9s);
+}
+
+@keyframes mecer {
+  from { transform: rotate(calc(var(--giro, 3deg) * -1)) translateX(-3px); }
+  to { transform: rotate(var(--giro, 3deg)) translateX(3px); }
+}
+
+/* 1) Brotan desde el borde inferior */
+.tulipan--brotar {
+  bottom: -5%;
+  transform-origin: 50% 100%;
+  animation: brotar var(--entrada, 1.4s) cubic-bezier(0.17, 0.84, 0.3, 1.08) var(--delay, 0s) both;
+}
+
+@keyframes brotar {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scaleY(0.04);
+  }
+  55% { opacity: var(--opacidad, 1); }
+  to {
+    opacity: var(--opacidad, 1);
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* 2) Suben flotando como burbujas */
+.tulipan--flotar {
+  bottom: -20px;
+  animation: flotar-entrada var(--entrada, 4s) cubic-bezier(0.22, 0.72, 0.24, 1) var(--delay, 0s) both;
+}
+
+@keyframes flotar-entrada {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 130%, 0) rotate(-4deg);
+  }
+  18% { opacity: var(--opacidad, 1); }
+  50% {
+    transform: translate3d(var(--deriva, 14px), calc(var(--subida, 45vh) * -0.55), 0) rotate(3deg);
+  }
+  to {
+    opacity: var(--opacidad, 1);
+    transform: translate3d(0, calc(var(--subida, 45vh) * -1), 0) rotate(0deg);
+  }
+}
+
+/* 3) Entran deslizándose desde un lado */
+.tulipan--deslizar {
+  animation: deslizar-entrada var(--entrada, 1.5s) cubic-bezier(0.16, 0.84, 0.3, 1) var(--delay, 0s) both;
+}
+
+@keyframes deslizar-entrada {
+  from {
+    opacity: 0;
+    transform: translateX(var(--desde, -120vw)) rotate(var(--giro, 3deg));
+  }
+  to {
+    opacity: var(--opacidad, 1);
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+/* 4) Aparecen con un pequeño "pop" */
+.tulipan--pop {
+  animation: pop-entrada var(--entrada, 1s) cubic-bezier(0.2, 1.35, 0.4, 1) var(--delay, 0s) both;
+}
+
+@keyframes pop-entrada {
+  from {
+    opacity: 0;
+    transform: scale(0.12) rotate(-8deg);
+  }
+  68% { opacity: var(--opacidad, 1); }
+  to {
+    opacity: var(--opacidad, 1);
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Los tulipanes del fondo se ven un poco más borrosos */
+.tulipan--profundo {
+  filter: blur(1.2px);
+}
+
+/* Versión sin movimiento (se usa si el usuario lo pide al sistema) */
+.tulipan--quieto {
+  animation: none !important;
+}
+
+/* ==========================================================
+   7. GLOBOS GENERADOS CON JAVASCRIPT
+   ========================================================== */
+.globo {
+  position: absolute;
+  bottom: -220px;
+  width: var(--w, 68px);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  will-change: transform;
+  animation: globo-subir var(--dur, 13s) linear var(--delay, 0s) forwards;
+}
+
+.globo-flotante {
+  display: block;
+  transform-origin: 50% 18%;
+  animation: globo-vaiven var(--vaiven, 3.4s) ease-in-out infinite alternate;
+}
+
+.globo-cuerpo {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 0.8;
+  border-radius: 50% 50% 47% 47% / 55% 55% 45% 45%;
+  background:
+    radial-gradient(ellipse at 32% 22%, rgba(255, 255, 255, 0.95) 0 4%, rgba(255, 255, 255, 0) 25%),
+    radial-gradient(circle at 33% 30%, var(--claro, #ffb3a7), var(--base, #ff6b5e) 55%, var(--oscuro, #c43644) 100%);
+  box-shadow:
+    inset -9px -13px 22px rgba(0, 0, 0, 0.22),
+    inset 7px 8px 16px rgba(255, 255, 255, 0.15),
+    0 22px 32px -14px rgba(0, 0, 0, 0.55);
+}
+
+/* Brillo alargado del globo */
+.globo-cuerpo::before {
+  content: "";
+  position: absolute;
+  top: 13%;
+  left: 17%;
+  width: 20%;
+  height: 29%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.48);
+  filter: blur(2px);
+  transform: rotate(-24deg);
+}
+
+/* Nudo del globo */
+.globo-cuerpo::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 13px;
+  height: 12px;
+  transform: translateX(-50%);
+  background: var(--oscuro, #c43644);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.globo-hilo {
+  display: block;
+  width: 30px;
+  height: 82px;
+  margin: -1px auto 0;
+  overflow: visible;
+  transform-origin: 50% 0;
+  animation: hilo-vaiven 3.1s ease-in-out infinite alternate;
+}
+
+.globo-hilo path {
+  fill: none;
+  stroke: rgba(255, 246, 230, 0.5);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+
+@keyframes globo-subir {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, calc(-100vh - 360px), 0); }
+}
+
+@keyframes globo-vaiven {
+  from { transform: translateX(-7px) rotate(-4deg); }
+  to { transform: translateX(7px) rotate(4deg); }
+}
+
+@keyframes hilo-vaiven {
+  from { transform: rotate(-5deg); }
+  to { transform: rotate(5deg); }
+}
+
+/* El globo puede explotar */
+.globo.explotado {
+  pointer-events: none;
+}
+
+.globo.explotado .globo-cuerpo {
+  animation: reventar 0.28s ease-out forwards;
+}
+
+.globo.explotado .globo-hilo {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+@keyframes reventar {
+  0% { transform: scale(1); opacity: 1; }
+  42% { transform: scale(1.22); opacity: 1; }
+  100% { transform: scale(0.15); opacity: 0; }
+}
+
+/* Globos quietos si el usuario prefiere menos movimiento */
+.globo--quieto {
+  top: var(--top, 20%);
+  bottom: auto;
+  animation: none !important;
+}
+
+.globo--quieto .globo-flotante,
+.globo--quieto .globo-hilo {
+  animation: none !important;
+}
+
+/* ==========================================================
+   8. RESPONSIVE
+   ========================================================== */
+@media (max-width: 860px) {
+  .accion {
+    width: min(100%, 620px);
+    grid-template-areas:
+      "texto"
+      "form"
+      "ayuda"
+      "error";
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .accion-texto p {
+    display: none;
+  }
+
+  .form-cumple {
+    width: 100%;
+  }
+
+  .campo {
+    flex: 1;
+  }
+
+  .campo input {
+    width: 100%;
+  }
+
+  .ayuda {
+    margin-top: -2px;
+    text-align: left;
+  }
+
+  .fila-edad {
+    max-width: 560px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .frase-edad {
+    text-align: center;
+  }
+
+  .fantasma--3 {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .barra {
+    padding: 16px 18px;
+  }
+
+  .marca-icono {
+    width: 38px;
+    height: 38px;
+  }
+
+  .marca-texto {
+    font-size: 10px;
+  }
+
+  .barra-detalle {
+    display: none;
+  }
+
+  .boton-sonido {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .boton-sonido-texto {
+    display: none;
+  }
+
+  .lienzo {
+    padding: 4px 16px 18px;
+    gap: 12px;
+  }
+
+  .vistas {
+    padding: 18px 0 22px;
+  }
+
+  .titulo-inicio {
+    margin-top: 14px;
+    font-size: clamp(3rem, 15vw, 4.2rem);
+  }
+
+  .entrada {
+    font-size: 0.94rem;
+  }
+
+  .micro {
+    margin-top: 18px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  .titulo-celebracion {
+    font-size: clamp(2.7rem, 13.5vw, 4.1rem);
+  }
+
+  .fila-edad {
+    margin-top: 14px;
+  }
+
+  .pastel-boton {
+    width: min(76vw, 300px);
+  }
+
+  .pastel-escena {
+    margin-top: 2px;
+  }
+
+  .pista {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+
+  .aviso {
+    font-size: 13px;
+  }
+
+  .accion {
+    border-radius: 18px;
+  }
+
+  .campo input,
+  .boton-celebrar {
+    height: 52px;
+  }
+
+  .campo input {
+    font-size: 23px;
+  }
+
+  .boton-celebrar {
+    padding: 0 17px;
+    font-size: 11px;
+  }
+
+  .pie {
+    padding: 14px 18px 18px;
+    justify-content: center;
+    font-size: 8px;
+    text-align: center;
+  }
+
+  .pie-detalle {
+    display: none;
+  }
+
+  .fantasma {
+    opacity: 0.08;
+  }
+}
+
+/* En pantallas de poca altura el pastel y el título se ajustan
+   para que el formulario siga a la vista. */
+@media (max-height: 940px) and (min-width: 861px) {
+  .pastel-boton {
+    width: min(28vh, 290px);
+  }
+
+  .titulo-celebracion {
+    font-size: clamp(2.8rem, 5.7vw, 5.3rem);
+  }
+
+  .vistas {
+    padding: 8px 0;
+  }
+
+  .fila-edad {
+    margin-top: 10px;
+  }
+}
+
+/* ==========================================================
+   9. MENOS MOVIMIENTO
+   Si el sistema lo pide, quitamos animaciones largas y confeti.
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .tulipan,
+  .globo,
+  .globo-flotante,
+  .globo-hilo,
+  .llama-movimiento,
+  .punto::after {
+    animation: none !important;
+  }
+
+  .tulipan {
+    opacity: var(--opacidad, 1);
+  }
+
+  .pastel-boton:hover {
+    transform: none;
+  }
+}
